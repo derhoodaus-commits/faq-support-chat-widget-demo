@@ -1,0 +1,162 @@
+[
+  [
+    "What's the postage to Germany?",
+    "shipping-cost"
+  ],
+  [
+    "Is shipping free over a certain amount?",
+    "shipping-cost"
+  ],
+  [
+    "how much do you charge for delivery",
+    "shipping-cost"
+  ],
+  [
+    "shiping costs",
+    "shipping-cost"
+  ],
+  [
+    "How many days until my order gets here?",
+    "delivery-time"
+  ],
+  [
+    "When will my plants arrive?",
+    "delivery-time"
+  ],
+  [
+    "how long is delivry",
+    "delivery-time"
+  ],
+  [
+    "Do you ship to Switzerland?",
+    "countries"
+  ],
+  [
+    "Can I order from Austria?",
+    "countries"
+  ],
+  [
+    "Are plants shipped when it's freezing outside?",
+    "winter-shipping"
+  ],
+  [
+    "Where's my parcel? I need the tracking number",
+    "tracking"
+  ],
+  [
+    "My order still hasn't arrived",
+    "tracking"
+  ],
+  [
+    "I want to cancel my order",
+    "change-order"
+  ],
+  [
+    "Can I update the shipping address?",
+    "change-order"
+  ],
+  [
+    "Where do I enter a promo code?",
+    "voucher"
+  ],
+  [
+    "I need an invoice for my company",
+    "invoice"
+  ],
+  [
+    "Do you take PayPal?",
+    "payment-methods"
+  ],
+  [
+    "Can I pay later on invoice?",
+    "payment-methods"
+  ],
+  [
+    "How do returns work?",
+    "returns"
+  ],
+  [
+    "I'd like to send a plant back",
+    "returns"
+  ],
+  [
+    "retun an item",
+    "returns"
+  ],
+  [
+    "When do I get my refund?",
+    "refunds"
+  ],
+  [
+    "The pot was smashed when it arrived",
+    "damaged"
+  ],
+  [
+    "leaves snapped off during shipping",
+    "damaged"
+  ],
+  [
+    "How much water does a monstera need?",
+    "watering"
+  ],
+  [
+    "how often to water",
+    "watering"
+  ],
+  [
+    "My plant has outgrown its pot",
+    "repotting"
+  ],
+  [
+    "Is a north-facing window bright enough?",
+    "light"
+  ],
+  [
+    "Is pothos safe for my cat?",
+    "pets"
+  ],
+  [
+    "pet friendly plants for a puppy owner",
+    "pets"
+  ],
+  [
+    "There are tiny black flies in the soil",
+    "pests"
+  ],
+  [
+    "how do i get rid of fungus gnats",
+    "pests"
+  ],
+  [
+    "I'm going on a three-week trip",
+    "vacation"
+  ],
+  [
+    "reset my password",
+    "password"
+  ],
+  [
+    "I can't log into my account",
+    "password"
+  ],
+  [
+    "Stop sending me marketing emails",
+    "newsletter"
+  ],
+  [
+    "My fern died after two weeks",
+    "guarantee"
+  ],
+  [
+    "How do I contact your support team?",
+    "contact"
+  ],
+  [
+    "How much does a monstera cost?",
+    "plant-prices"
+  ],
+  [
+    "price of a calathea",
+    "plant-prices"
+  ]
+]

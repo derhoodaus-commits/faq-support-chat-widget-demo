@@ -1,0 +1,5 @@
+ID,Category,Question,Answer,Keywords,Link
+shipping-cost,Shipping,How much does shipping cost?,"Shipping within Germany costs €5.90. Orders of €59 or more ship free.","postage, shipping cost, free shipping",https://www.farnhaus.example/help/shipping#cost
+returns,Returns,How do I return an order?,"You can return items within 14 days.
+Register the return in your account.","return, send back, return label",https://www.farnhaus.example/help/returns
+,Plant care,"How often should I ""water"" my plant?",When the top 2–3 cm of soil is dry.,"water, watering",

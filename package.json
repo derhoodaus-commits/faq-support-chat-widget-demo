@@ -1,0 +1,24 @@
+{
+  "name": "help-chat-widget",
+  "version": "1.0.0",
+  "description": "Demo project: embeddable customer support chat widget with FAQ search, sources, and handoff to a person",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "test": "node --test tests/",
+    "test:e2e": "python tests/e2e.py",
+    "test:e2e:pages": "python tests/e2e_pages.py",
+    "build:pages": "node scripts/build-pages.js",
+    "faq:import": "node scripts/import-faq.js"
+  },
+  "license": "UNLICENSED",
+  "type": "module",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.8.0",
+    "nodemailer": "^10.5.0"
+  },
+  "private": true,
+  "engines": {
+    "node": ">=20.12"
+  }
+}

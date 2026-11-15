@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Test page with aggressive CSS – help widget</title>
+  <!-- Deliberately "hostile" CSS: checks that the widget in its Shadow DOM is unaffected by it. -->
+  <style>
+    * { font-family: "Courier New", monospace !important; font-size: 22px !important; color: #c00 !important; letter-spacing: 3px !important; }
+    button, input, div, section, header { border: 4px dashed magenta !important; background: yellow !important; border-radius: 0 !important; }
+    body { background: #222 !important; padding: 2rem; }
+    h1 { color: #fff !important; }
+    p { color: #eee !important; max-width: 40rem; }
+    a { color: #9cf !important; }
+  </style>
+</head>
+<body>
+  <h1>A foreign website with its own aggressive CSS</h1>
+  <p>This page overrides fonts, colors, and borders on every element with <code>!important</code>. The help widget still looks exactly like it does on the shop page because it runs in Shadow DOM. Here it's also embedded in the bottom-left corner with a different brand color (data-position, data-color).</p>
+  <p><a href="./">Back to the demo shop</a> · Demo project</p>
+  <script src="/widget.js" data-color="#7a3e9d" data-position="left" defer></script>
+</body>
+</html>

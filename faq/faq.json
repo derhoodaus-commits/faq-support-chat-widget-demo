@@ -1,0 +1,401 @@
+{
+  "company": {
+    "name": "Farnhaus Plants",
+    "assistantName": "Farnhaus Help",
+    "greeting": "Hi! I can answer questions about shipping, returns, payment, and plant care. What would you like to know?",
+    "suggestions": [
+      "How much is shipping?",
+      "How do I return something?",
+      "Is Monstera toxic to cats?"
+    ],
+    "supportHours": "Mon–Fri 9 am–5 pm",
+    "note": "Demo project: Farnhaus Plants is a fictional company."
+  },
+  "entries": [
+    {
+      "id": "shipping-cost",
+      "category": "Shipping",
+      "question": "How much is shipping?",
+      "answer": "Shipping within Germany costs €5.90. Orders of €59 or more ship free. Large plants over 1.20 m are delivered by freight carrier for a flat fee of €29.",
+      "keywords": [
+        "shipping cost",
+        "postage",
+        "delivery fee",
+        "free shipping",
+        "free",
+        "freight",
+        "fee"
+      ],
+      "url": "https://www.farnhaus.example/help/shipping#cost"
+    },
+    {
+      "id": "delivery-time",
+      "category": "Shipping",
+      "question": "How long does delivery take?",
+      "answer": "We ship Monday through Wednesday so no plant spends the weekend in a parcel depot. Orders placed by Wednesday noon go out the same week; delivery then usually takes 1–2 business days.",
+      "keywords": [
+        "delivery time",
+        "how long",
+        "when",
+        "arrive",
+        "days",
+        "fast",
+        "weekend",
+        "dispatch"
+      ],
+      "url": "https://www.farnhaus.example/help/shipping#delivery-time"
+    },
+    {
+      "id": "countries",
+      "category": "Shipping",
+      "question": "Which countries do you ship to?",
+      "answer": "We ship to Germany, Austria, the Netherlands, Belgium, and Luxembourg. Unfortunately, we can't ship to Switzerland because of its plant health regulations.",
+      "keywords": [
+        "countries",
+        "abroad",
+        "international",
+        "austria",
+        "switzerland",
+        "netherlands",
+        "belgium",
+        "luxembourg",
+        "eu"
+      ],
+      "url": "https://www.farnhaus.example/help/shipping#countries"
+    },
+    {
+      "id": "winter-shipping",
+      "category": "Shipping",
+      "question": "Do you ship in winter?",
+      "answer": "Yes. Below 5 °C (41 °F), we pack every plant with a heat pack and insulation. During a hard freeze below −8 °C (18 °F), we briefly hold orders and email you the new ship date.",
+      "keywords": [
+        "winter",
+        "cold",
+        "frost",
+        "freezing",
+        "heat pack",
+        "temperature",
+        "insulation"
+      ],
+      "url": "https://www.farnhaus.example/help/shipping#winter"
+    },
+    {
+      "id": "tracking",
+      "category": "Shipping",
+      "question": "Where is my package?",
+      "answer": "As soon as your package is on its way, we email you a tracking link. You'll also find the link in your account under “Orders.”",
+      "keywords": [
+        "tracking",
+        "track",
+        "package",
+        "parcel",
+        "tracking number",
+        "status",
+        "shipped",
+        "where"
+      ],
+      "url": "https://www.farnhaus.example/help/shipping#tracking"
+    },
+    {
+      "id": "change-order",
+      "category": "Orders",
+      "question": "Can I change or cancel my order?",
+      "answer": "Yes, as long as it hasn't been packed yet. Just reply to your order confirmation or use “Talk to a person.” If the package is already on its way, you can return the plants after they arrive.",
+      "keywords": [
+        "change",
+        "cancel",
+        "cancellation",
+        "edit",
+        "address",
+        "wrong",
+        "order",
+        "mistake"
+      ],
+      "url": "https://www.farnhaus.example/help/orders#change"
+    },
+    {
+      "id": "plant-prices",
+      "category": "Ordering",
+      "question": "How much do your plants cost?",
+      "answer": "Each plant’s price is shown on its product page, including VAT and the pot it ships in. Prices depend on the size; the product page lists every available size with its own price.",
+      "keywords": [
+        "plant price",
+        "product price",
+        "price",
+        "prices",
+        "cost",
+        "how much",
+        "expensive",
+        "cheap",
+        "size"
+      ],
+      "url": "https://www.farnhaus.example/help/ordering#prices"
+    },
+    {
+      "id": "voucher",
+      "category": "Orders",
+      "question": "How do I redeem a voucher?",
+      "answer": "Enter the code in the “Voucher” field in your cart. You can use one discount code per order; gift cards can be combined freely.",
+      "keywords": [
+        "voucher",
+        "discount code",
+        "code",
+        "redeem",
+        "gift card",
+        "discount",
+        "promo",
+        "coupon"
+      ],
+      "url": "https://www.farnhaus.example/help/orders#voucher"
+    },
+    {
+      "id": "invoice",
+      "category": "Orders",
+      "question": "Where can I find my invoice?",
+      "answer": "The invoice isn't in the package. We email it as a PDF once your order ships, and you can download it again anytime from your account.",
+      "keywords": [
+        "invoice",
+        "receipt",
+        "pdf",
+        "vat",
+        "tax",
+        "business",
+        "company",
+        "bill"
+      ],
+      "url": "https://www.farnhaus.example/help/orders#invoice"
+    },
+    {
+      "id": "payment-methods",
+      "category": "Payment",
+      "question": "Which payment methods do you accept?",
+      "answer": "You can pay by credit card, direct debit, instant bank transfer, or invoice. Pay-by-invoice is available for orders up to €500, with 14 days to pay.",
+      "keywords": [
+        "payment",
+        "pay",
+        "credit card",
+        "direct debit",
+        "bank transfer",
+        "payment method",
+        "pay later",
+        "checkout"
+      ],
+      "url": "https://www.farnhaus.example/help/payment"
+    },
+    {
+      "id": "returns",
+      "category": "Returns",
+      "question": "How do I return an order?",
+      "answer": "You can return items within 14 days of receiving them. Register the return in your account under “Orders” and we'll send you a free return label. Please send plants back in their original packaging.",
+      "keywords": [
+        "return",
+        "send back",
+        "returns",
+        "exchange",
+        "withdrawal",
+        "label",
+        "return label"
+      ],
+      "url": "https://www.farnhaus.example/help/returns"
+    },
+    {
+      "id": "refunds",
+      "category": "Returns",
+      "question": "When will I get my money back?",
+      "answer": "Once your return reaches us, we refund the amount within 5 business days to your original payment method.",
+      "keywords": [
+        "refund",
+        "money back",
+        "money",
+        "reimburse",
+        "credit",
+        "repayment"
+      ],
+      "url": "https://www.farnhaus.example/help/returns#refund"
+    },
+    {
+      "id": "damaged",
+      "category": "Complaints",
+      "question": "My plant arrived damaged. What now?",
+      "answer": "We're sorry about that. Please send us a photo of the plant and the packaging within 3 days via “Talk to a person” or by email. We'll send a free replacement or refund the purchase price — you don't need to send the plant back.",
+      "keywords": [
+        "damaged",
+        "broken",
+        "snapped",
+        "complaint",
+        "defective",
+        "shipping damage",
+        "replacement",
+        "wilted",
+        "yellow"
+      ],
+      "url": "https://www.farnhaus.example/help/complaints"
+    },
+    {
+      "id": "watering",
+      "category": "Plant care",
+      "question": "How often should I water my plant?",
+      "answer": "Water most houseplants only when the top 2–3 cm (about an inch) of soil is dry — roughly once a week in summer, less often in winter. Soggy soil is the most common reason plants die. Every plant from us comes with its own care card with exact details.",
+      "keywords": [
+        "water",
+        "watering",
+        "dry",
+        "soggy",
+        "moist",
+        "overwatering",
+        "care"
+      ],
+      "url": "https://www.farnhaus.example/care/watering"
+    },
+    {
+      "id": "repotting",
+      "category": "Plant care",
+      "question": "When should I repot?",
+      "answer": "Repot in spring when roots grow out of the bottom of the pot. Choose a pot 2–4 cm (about 1–1.5 inches) wider and fresh houseplant soil. Please wait 2–3 weeks before repotting a freshly delivered plant.",
+      "keywords": [
+        "repot",
+        "pot",
+        "soil",
+        "roots",
+        "planter",
+        "bigger",
+        "spring"
+      ],
+      "url": "https://www.farnhaus.example/care/repotting"
+    },
+    {
+      "id": "light",
+      "category": "Plant care",
+      "question": "Where should I put my plant?",
+      "answer": "Most foliage plants like a bright spot without direct midday sun, such as an east- or west-facing window. Every plant in our shop is labeled by light needs: “shade,” “bright,” or “sunny.”",
+      "keywords": [
+        "light",
+        "sun",
+        "bright",
+        "shade",
+        "window",
+        "dark",
+        "spot",
+        "location"
+      ],
+      "url": "https://www.farnhaus.example/care/light"
+    },
+    {
+      "id": "pets",
+      "category": "Plant care",
+      "question": "Which plants are toxic to cats and dogs?",
+      "answer": "Some popular plants, such as Monstera, pothos, and dieffenbachia, are toxic to cats and dogs. In our shop you can filter by “pet-friendly”; that includes calathea, spider plant, and pilea, for example.",
+      "keywords": [
+        "toxic",
+        "poisonous",
+        "cat",
+        "dog",
+        "pet",
+        "animal",
+        "non-toxic",
+        "pet-friendly",
+        "safe"
+      ],
+      "url": "https://www.farnhaus.example/care/pets"
+    },
+    {
+      "id": "pests",
+      "category": "Plant care",
+      "question": "My plant has pests. What helps?",
+      "answer": "First, move the plant away from your other plants. For fungus gnats, let the soil dry out more and put up yellow sticky traps; spider mites and aphids can be rinsed off with lukewarm water. If pests show up within 14 days of delivery, send us a photo.",
+      "keywords": [
+        "pests",
+        "fungus gnats",
+        "gnats",
+        "flies",
+        "aphids",
+        "spider mites",
+        "infestation",
+        "bugs",
+        "insects"
+      ],
+      "url": "https://www.farnhaus.example/care/pests"
+    },
+    {
+      "id": "vacation",
+      "category": "Plant care",
+      "question": "What do I do with my plants while I'm on vacation?",
+      "answer": "For up to two weeks, it's usually enough to water your plants thoroughly beforehand and move them a little farther from the window. For longer trips, we recommend clay watering spikes, which you'll find in our “Accessories” section.",
+      "keywords": [
+        "vacation",
+        "travel",
+        "away",
+        "trip",
+        "holiday",
+        "watering spikes",
+        "weeks"
+      ],
+      "url": "https://www.farnhaus.example/care/vacation"
+    },
+    {
+      "id": "password",
+      "category": "Account",
+      "question": "I forgot my password.",
+      "answer": "Click “Forgot password?” on the sign-in page. We'll email you a link to set a new password. The link is valid for 60 minutes.",
+      "keywords": [
+        "password",
+        "login",
+        "sign in",
+        "log in",
+        "reset",
+        "account",
+        "forgot"
+      ],
+      "url": "https://www.farnhaus.example/help/account#password"
+    },
+    {
+      "id": "newsletter",
+      "category": "Account",
+      "question": "How do I unsubscribe from the newsletter?",
+      "answer": "Every newsletter has an “Unsubscribe” link at the bottom. You can also turn off the newsletter in your account under “Settings.”",
+      "keywords": [
+        "newsletter",
+        "unsubscribe",
+        "emails",
+        "marketing",
+        "subscription",
+        "opt out"
+      ],
+      "url": "https://www.farnhaus.example/help/account#newsletter"
+    },
+    {
+      "id": "guarantee",
+      "category": "Complaints",
+      "question": "Do you offer a growth guarantee?",
+      "answer": "Yes. If a plant dies within 30 days of delivery despite proper care, we'll replace it free of charge. Just send us a photo and a quick note about where the plant was placed.",
+      "keywords": [
+        "guarantee",
+        "growth guarantee",
+        "died",
+        "dead",
+        "dying",
+        "replacement",
+        "warranty",
+        "30"
+      ],
+      "url": "https://www.farnhaus.example/help/guarantee"
+    },
+    {
+      "id": "contact",
+      "category": "Contact",
+      "question": "How can I reach customer service?",
+      "answer": "Our team is available Mon–Fri, 9 am–5 pm, by email at help@farnhaus.example. Use “Talk to a person” here in the chat to send us your question along with the chat history.",
+      "keywords": [
+        "contact",
+        "customer service",
+        "reach",
+        "phone",
+        "email",
+        "support",
+        "team",
+        "service"
+      ],
+      "url": "https://www.farnhaus.example/contact"
+    }
+  ]
+}
