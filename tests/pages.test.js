@@ -10,6 +10,7 @@ import { createServer } from '../server/index.js';
 
 const BASE = '/faq-support-chat-widget-demo/';
 const cases = JSON.parse(readFileSync(new URL('./search-cases.json', import.meta.url), 'utf8'));
+const offtopic = JSON.parse(readFileSync(new URL('./offtopic-cases.json', import.meta.url), 'utf8'));
 const EXTRA = [
   'What will the weather be like tomorrow?', 'What is the capital of France?', 'Are you hiring? Any jobs?', 'I want to buy a car',
   'asdf qwer', '???', 'shiping costs', 'returnlabel printing', 'trackinglink', 'Can I pay by invoice?', 'Where can I find the invoice?',
@@ -40,10 +41,12 @@ after(() => { servers.forEach((s) => s.close()); rmSync(dir, { recursive: true, 
 const ids = (list) => (list || []).map((s) => s.id);
 const comparable = (r) => ({ kind: r.kind, text: r.text, mode: r.mode, sources: ids(r.sources), related: ids(r.related) });
 
-test(`static search gives the same replies as the server's demo mode (${cases.length + EXTRA.length} questions)`, async () => {
+const ALL = [...cases.map(([q]) => q), ...offtopic.map(([q]) => q), ...EXTRA];
+
+test(`static search gives the same replies as the server's demo mode (${ALL.length} questions)`, async () => {
   const diffs = [];
   let api;
-  for (const [i, q] of [...cases.map(([question]) => question), ...EXTRA].entries()) {
+  for (const [i, q] of ALL.entries()) {
     if (i % 30 === 0) api = await startServer();
     const fromServer = await (await fetch(api + '/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: q }) })).json();
     const fromStatic = engine.demoReply(index, q);
@@ -60,6 +63,10 @@ test('static search lands on the expected entry for every test question, with a 
     assert.equal(r.sources[0].url, `faq.html#${expected}`, q);
   }
   assert.equal(engine.demoReply(index, 'What will the weather be like tomorrow?').kind, 'unsure');
+  for (const [q, expected] of offtopic) {
+    const r = engine.demoReply(index, q);
+    assert.equal(r.kind === 'answer' ? r.sources[0].id : null, expected, q);
+  }
   assert.equal(engine.demoReply(index, 'I want to talk to a human').kind, 'handoff');
 });
 

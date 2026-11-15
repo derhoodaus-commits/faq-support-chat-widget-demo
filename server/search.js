@@ -12,7 +12,7 @@ were what whatever when where whether which while who whom whose why will with w
 im ive id youre dont doesnt didnt cant couldnt wont wouldnt isnt arent wasnt shouldnt thats theres whats wheres hows whens
 hi hello hey thanks thank thx cheers ok okay yes yeah sure want wanted wanna need like would know tell question questions
 really actually exactly maybe possible possibly anyone someone something anything thing things way ask asking buy buying
-u ur pls plz
+u ur pls plz offer offers offering provide provides many certain work works
 `.trim().split(/\s+/));
 
 // Everyday wording and variants → terms used in the FAQ (normalized, before stemming)
@@ -112,6 +112,26 @@ const SYNONYMS = {
   telephone: ['phone', 'contact'],
   hotline: ['phone', 'contact'],
   hours: ['contact'],
+  weekend: ['delivery'],
+  weekends: ['weekend', 'delivery'],
+  saturday: ['weekend', 'delivery'],
+  saturdays: ['weekend', 'delivery'],
+  sunday: ['weekend', 'delivery'],
+  sundays: ['weekend', 'delivery'],
+  // Plant words the FAQ doesn't spell out, so they don't count as unknown topics
+  leaf: ['plant'],
+  leaves: ['plant'],
+  fern: ['plant'],
+  ferns: ['plant'],
+  cactus: ['plant'],
+  cacti: ['plant'],
+  succulent: ['plant'],
+  succulents: ['plant'],
+  orchid: ['plant'],
+  orchids: ['plant'],
+  ficus: ['plant'],
+  palm: ['plant'],
+  palms: ['plant'],
   thirsty: ['water'],
   overwater: ['water', 'soggy'],
   overwatered: ['water', 'soggy'],
@@ -146,6 +166,8 @@ const PHRASES = [
   [/\b(delivery|shipping) (fee|fees|charge|charges|price)\b/, ['shipping cost']],
   [/\bhow much\b.*\b(ship|shipping|delivery)\b|\b(ship|shipping|delivery)\b.*\bhow much\b/, ['cost']],
   [/\b(promo|discount|coupon) code\b/, ['voucher']],
+  [/\b(opening|business|office|service) hours\b|\bwhen are you open\b/, ['contact']],
+  [/\b(stop|no more) (sending|emailing|mailing)\b/, ['newsletter', 'unsubscribe']],
 ];
 
 /** Lowercase, fold umlauts and accents, drop apostrophes and punctuation. */
@@ -233,7 +255,17 @@ export function buildIndex(entries) {
         len += weight;
       }
     }
-    return { entry: e, tf, len };
+    // What the entry is *about*: words of its question and single-word keywords, plus multi-word keywords.
+    // A word that only appears in the answer ("proper care") or only modifies a longer keyword ("gift" in
+    // "gift card") is not enough to answer confidently.
+    const topic = new Set(tokenize(e.question || ''));
+    const topicPhrases = [];
+    for (const k of e.keywords || []) {
+      const parts = tokenize(k);
+      if (parts.length === 1) topic.add(parts[0]);
+      else if (parts.length > 1) topicPhrases.push(parts);
+    }
+    return { entry: e, tf, len, topic, topicPhrases };
   });
   const df = new Map();
   for (const d of docs) for (const t of d.tf.keys()) df.set(t, (df.get(t) || 0) + 1);
@@ -245,9 +277,14 @@ export function buildIndex(entries) {
 function resolveTerm(term, index) {
   if (index.df.has(term)) return [{ term, weight: 1 }];
   const found = [];
-  // Run-together words: "houseplant" → "house" + "plant", "trackinglink" → "track" + "link"
-  for (const v of index.vocab) {
-    if (v.length >= 4 && term.length > v.length + 2 && (term.startsWith(v) || term.endsWith(v))) found.push({ term: v, weight: 0.7 });
+  // Run-together words: "returnlabel" → "return" + "label", "trackinglink" → "track" + "link".
+  // Both ends must be known terms, otherwise "workshop" would turn into "shop".
+  const starts = index.vocab.filter((v) => v.length >= 3 && term.length > v.length + 2 && term.startsWith(v));
+  const ends = index.vocab.filter((v) => v.length >= 3 && term.length > v.length + 2 && term.endsWith(v));
+  for (const a of starts) for (const b of ends) {
+    if (a.length + b.length > term.length) continue;
+    if (a.length >= 4) found.push({ term: a, weight: 0.7 });
+    if (b.length >= 4) found.push({ term: b, weight: 0.7 });
   }
   // Word beginnings: "invo" ↔ "invoice"
   if (!found.length && term.length >= 4) {
@@ -271,31 +308,51 @@ function resolveTerm(term, index) {
  * Finds matching FAQ entries.
  * @returns {{ results: Array<{entry, score}>, confident: boolean }}
  */
+/** Content words of the query that the FAQ doesn't know at all – not even via synonyms, phrases, typos, or word parts. */
+function unknownWords(query, index) {
+  const norm = normalize(query);
+  const inPhrase = new Set(PHRASES.flatMap(([re]) => norm.match(re)?.[0].split(' ') ?? []));
+  const expand = (p) => normalize(p).split(' ').filter((x) => x && !STOPWORDS.has(x)).map(stem);
+  return norm.split(' ')
+    .filter((w) => w && !STOPWORDS.has(w) && (w.length > 1 || /\d/.test(w)) && !inPhrase.has(w))
+    .filter((w) => ![stem(w), ...(SYNONYMS[w] || []).flatMap(expand)].some((t) => resolveTerm(t, index).length));
+}
+
 export function search(index, query, { limit = 3, threshold = 2.6 } = {}) {
   const raw = tokenize(query, { expand: true });
-  if (!raw.length) return { results: [], confident: false, terms: [] };
+  if (!raw.length) return { results: [], confident: false, terms: [], unknown: [] };
   const terms = new Map();
   for (const t of raw) for (const r of resolveTerm(t, index)) terms.set(r.term, Math.max(terms.get(r.term) || 0, r.weight));
 
   const N = index.docs.length;
   const scored = index.docs.map((d) => {
     let score = 0;
-    let exact = 0;
+    let exact = 0; // topic terms matched exactly
+    let near = 0; // topic terms matched via typo or word part
     for (const [t, w] of terms) {
       const f = d.tf.get(t);
       if (!f) continue;
-      if (w >= 1) exact++;
+      if (d.topic.has(t)) w >= 1 ? exact++ : near++;
       const idf = Math.log(1 + (N - index.df.get(t) + 0.5) / (index.df.get(t) + 0.5));
       score += w * idf * ((f * (K1 + 1)) / (f + K1 * (1 - B + (B * d.len) / index.avgLen)));
     }
-    return { entry: d.entry, score: Math.round(score * 100) / 100, exact };
+    // Multi-word keyword: matches if all its words match, or its last word (the head: "card" in "gift card")
+    for (const p of d.topicPhrases) {
+      const hit = p.every((t) => terms.has(t)) ? Math.max(...p.map((t) => terms.get(t))) : terms.get(p.at(-1));
+      if (hit) hit >= 1 ? exact++ : near++;
+    }
+    return { entry: d.entry, score: Math.round(score * 100) / 100, exact, near };
   });
   scored.sort((a, b) => b.score - a.score);
   const results = scored.filter((s) => s.score > 0).slice(0, limit);
-  // Confident only if the top hit scores high enough AND at least one term matches exactly (not just fuzzily)
+  // Confident only if the top hit scores high enough AND matches its topic (question or keywords) – exactly, or
+  // fuzzily with a clearly higher score. Words that only appear in the answer don't count. Every word the FAQ doesn't know raises the bar: in "plant care workshops" or "student discount" the unknown
+  // word is usually the actual topic, and a match on the remaining generic words is not a real answer.
   const top = results[0];
-  const confident = Boolean(top) && top.score >= threshold && (top.exact > 0 || top.score >= threshold * 1.5);
-  return { results: results.map(({ exact, ...r }) => r), confident, terms: [...terms.keys()] };
+  const unknown = unknownWords(query, index);
+  const bar = threshold * (1 + 1.5 * unknown.length);
+  const confident = Boolean(top) && top.score >= bar && (top.exact > 0 || (top.near > 0 && top.score >= bar * 1.5));
+  return { results: results.map(({ exact, near, ...r }) => r), confident, terms: [...terms.keys()], unknown };
 }
 
 // ---------- Simple intents (greeting, thanks, human) ----------

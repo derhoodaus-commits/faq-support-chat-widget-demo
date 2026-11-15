@@ -99,7 +99,7 @@ ones from older exports work too), and generates missing IDs from the question.
 |---|---|---|
 | Widget | Vanilla JS, ~25 KB, **Shadow DOM**, no dependencies | Runs on any page; the page's CSS doesn't affect the widget and vice versa (tested with a deliberately “hostile” page). |
 | Server | Node.js `node:http` | Small, no framework; serves `widget.js`, the demo pages, and the API. |
-| Search (demo mode) | Custom implementation instead of a search library | Tuned for English (light stemmer, contractions like “hasn't”, synonyms like postage/refund/bugs), fully transparent, no key needed. An answer only counts as “confident” if it scores high enough **and** at least one term matches exactly – so weather, job, or car questions don't get wrong answers. |
+| Search (demo mode) | Custom implementation instead of a search library | Tuned for English (light stemmer, contractions like “hasn't”, synonyms like postage/refund/bugs), fully transparent, no key needed. An answer only counts as “confident” if it scores high enough **and** matches what the entry is about (its question or keywords, not just a word somewhere in the answer). Every word the FAQ doesn't know at all raises the bar – in “plant care workshops” or “student discount” the unknown word is the real topic – so such questions get “Talk to a person” instead of a wrong answer. |
 | Claude mode | Official SDK `@anthropic-ai/sdk`, model `claude-opus-5-5` (configurable via `ANTHROPIC_MODEL`), low effort (`effort: low`, plenty for chat), FAQ in a **cached** system prompt, server-side fallback on refusals (`fallbacks: "default"`) | Short, friendly answers that still rely only on the FAQ; citations make every statement checkable. Replies in the customer's language (English by default). Large FAQs (> 60 entries) send only the top search hits. |
 | Keys | Only via environment variable / `.env` (not in the repo), `.env.example` as a template | No keys in the code. |
 | Handoff to a person | Form in the widget, validated in the browser **and** on the server, ticket number `FH-XXXXXX`, stored in `data/handoffs.jsonl`, email via SMTP (nodemailer) with Reply-To set to the customer | Works right away without a mail server; add SMTP details to go live. |
@@ -125,7 +125,7 @@ active mode. `CHAT_MODE=demo` forces demo mode.
 ## Tests
 
 ```bash
-npm test                # 43 tests (node:test): search, CSV import, Claude mode, API, static build
+npm test                # 45 tests (node:test): search, CSV import, Claude mode, API, static build
 npm run test:e2e        # 33 browser checks with Playwright (Python) + screenshots (server mode)
 npm run test:e2e:pages  # 103 browser checks of the static GitHub Pages build (desktop + phone)
 ```
@@ -135,7 +135,7 @@ npm run test:e2e:pages  # 103 browser checks of the static GitHub Pages build (d
 - **Search:** normalization, stemming, stopwords, synonyms; **40 paraphrased customer questions** all land
   confidently on the right entry (including “postage”, “send a plant back”, “tiny black flies in the soil”,
   “I can't log into my account”); typos (“shiping costs”, “retun an item”) and run-together words (“returnlabel”);
-  6 off-topic questions are **not** answered confidently; phrases (“pay by invoice”, “hasn't arrived”);
+  6 off-topic questions are **not** answered confidently; 33 plausible shop questions the FAQ doesn't cover (workshops, gift wrapping, student discount, hiring, wholesale, pick-up, …) get the fallback or the one entry that really answers them (opening hours → contact); phrases (“pay by invoice”, “hasn't arrived”);
   intents (human, thanks, greeting).
 - **FAQ/CSV:** quotes, commas, and line breaks in cells, semicolons, CRLF, BOM, unclosed quotes, German column
   names, validation with clear messages, reloading without a restart.
@@ -147,7 +147,7 @@ npm run test:e2e:pages  # 103 browser checks of the static GitHub Pages build (d
   unknown questions, small talk, input validation (400/415/405), Claude mode and fallback, `CHAT_MODE=demo`,
   handoff with validation, ticket, storage, and **email content** (nodemailer in JSON test mode),
   CORS (allowed, denied, preflight), rate limiting.
-- **Static build:** all 40 test questions plus 17 edge cases give the same reply as the server's demo mode; engine
+- **Static build:** all 40 test questions, the 33 shop questions, and 17 edge cases give the same reply as the server's demo mode; engine
   files identical to the server modules; every `href`/`src` in the output resolves to an existing file (and anchor)
   under `/faq-support-chat-widget-demo/`, nothing root-relative, no `/api`. In the browser: no console errors, no failed
   requests, no `/api` calls and no POST requests at all, handoff confirms “nothing was sent”, 404 page.
@@ -165,6 +165,8 @@ Screenshots: [`screenshots/`](screenshots/) (desktop, tablet, phone, handoff, fo
   handling, and all error paths are tested with a fake SDK client. Run through it once with a real key before going live.
 - Keyword search is built for English. Other languages would need their own stopwords, stemming, and synonyms
   (Claude mode, by contrast, answers in the customer's language).
+- Borderline cases remain: “Can I change my email address?” is answered with the change-order entry (it looks just
+  like “change the shipping address”), and “Do you repot plants for customers?” gets the repotting guide.
 - The 40 test questions were written alongside the synonym list, so real-world accuracy will be somewhat lower;
   unanswered questions end up as a handoff, not a wrong answer.
 - Rate limiting lives in memory (fine for one server; use e.g. Redis for multiple instances).

@@ -6,6 +6,8 @@ import { normalize, stem, tokenize, buildIndex, search, detectIntent } from '../
 const faq = JSON.parse(readFileSync(new URL('../faq/faq.json', import.meta.url), 'utf8'));
 const index = buildIndex(faq.entries);
 const cases = JSON.parse(readFileSync(new URL('./search-cases.json', import.meta.url), 'utf8'));
+// Plausible shop questions the FAQ doesn't (or only partly) cover: [question, expected entry id, or null = fall back]
+const offtopic = JSON.parse(readFileSync(new URL('./offtopic-cases.json', import.meta.url), 'utf8'));
 
 test('normalization: case, apostrophes, punctuation, accents, umlauts', () => {
   assert.equal(normalize("Where's my PARCEL?!"), 'wheres my parcel');
@@ -49,6 +51,25 @@ test('questions outside the FAQ are not answered confidently', () => {
   for (const q of ['What will the weather be like tomorrow?', 'What is the capital of France?', 'Are you hiring? Any jobs?', 'I want to buy a car', 'asdf qwer', '???']) {
     assert.equal(search(index, q).confident, false, q);
   }
+});
+
+test(`${offtopic.length} plausible shop questions get the right entry or the fallback, never an unrelated confident answer`, () => {
+  const wrong = [];
+  for (const [q, expected] of offtopic) {
+    const r = search(index, q);
+    const got = r.confident ? r.results[0].entry.id : null;
+    if (got !== expected) wrong.push(`${q} → ${got ?? 'fallback'} (expected ${expected ?? 'fallback'})`);
+  }
+  assert.deepEqual(wrong, []);
+});
+
+test('an unknown topic word raises the bar; generic words alone are not enough', () => {
+  const r = search(index, 'Do you offer plant care workshops?');
+  assert.deepEqual(r.unknown, ['workshops']);
+  assert.equal(r.confident, false);
+  assert.ok(!r.terms.includes('shop'), '"workshop" must not be split into "work" + "shop"');
+  assert.equal(search(index, 'Do you offer a growth guarantee?').results[0].entry.id, 'guarantee');
+  assert.equal(search(index, 'Do you offer a growth guarantee?').confident, true);
 });
 
 test('phrases: "pay by invoice" means the payment method, not the document', () => {
